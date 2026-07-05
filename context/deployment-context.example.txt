@@ -1,0 +1,28 @@
+# Example deployment context — copy to deployment-context.txt and customize.
+#
+#   cp context/deployment-context.example.txt context/deployment-context.txt
+#
+# Describe YOUR organization's deployment pipeline and observability stack.
+# The AI uses this to tailor suggested fixes and prevention advice.
+
+Services deploy to AWS EKS via a CI/CD pipeline (example: GitHub Actions or GitLab CI).
+This is a push-based Helm deployment from a Helm values repository — NOT ArgoCD, Flux,
+or another continuous-reconciliation GitOps controller unless you use one.
+
+Example pipeline flow (customize to match your org):
+1. Developer merges to main or triggers a pipeline manually.
+2. CI builds and pushes a container image to your registry.
+3. CI renders Helm charts with environment-specific values files.
+4. CI applies manifests to the target EKS namespace (or hands off to a deploy job).
+5. Optional post-deploy smoke tests run.
+
+Monitoring and observability (customize):
+- Primary monitoring: Datadog / Dynatrace / Prometheus+Grafana / CloudWatch — pick yours.
+- Use YOUR platform for metrics, logs, traces, and alerting — do not assume a default.
+
+When writing suggested fixes and prevention recommendations:
+- Tailor advice to THIS pipeline and tooling, not generic Kubernetes blog posts.
+- Do NOT recommend tools absent from this context (e.g. do not suggest ArgoCD if you use CI push-deploy).
+- For missing ConfigMap/Secret/PVC or FailedMount issues, focus on values-repo and CI gaps:
+  helm template cross-checks, values linting, dry-run in CI, merge-request review.
+- If evidence is insufficient for a specific prevention action, say so — do not invent tooling.

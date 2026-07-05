@@ -1,0 +1,32 @@
+{
+  "cluster_context": "demo-eks-cluster",
+  "namespace": "staging",
+  "status": "anomaly",
+  "message": "Anomaly detected",
+  "summary": {
+    "total_pods": 4,
+    "running_pods": 3,
+    "failed_pods": 0,
+    "pending_pods": 0,
+    "total_deployments": 2,
+    "healthy_deployments": 1,
+    "warning_events": 2,
+    "issues_count": 2
+  },
+  "issues": [
+    {
+      "severity": "critical",
+      "type": "CrashLoopBackOff",
+      "resource_kind": "Pod",
+      "resource_name": "web-app-6d4f8b2c1-abc12",
+      "message": "Pod container 'app' is in CrashLoopBackOff"
+    },
+    {
+      "severity": "critical",
+      "type": "DeploymentReplicaMismatch",
+      "resource_kind": "Deployment",
+      "resource_name": "web-app",
+      "message": "Deployment has 2 available replicas out of 3 desired replicas"
+    }
+  ]
+}

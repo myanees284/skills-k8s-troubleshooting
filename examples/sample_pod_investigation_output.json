@@ -1,0 +1,198 @@
+{
+  "cluster_context": "demo-eks-cluster",
+  "namespace": "staging",
+  "status": "success",
+  "investigation_status": "anomaly_detected",
+  "summary": {
+    "message": "Anomaly detected and evidence collected for requested pod",
+    "affected_pods": 1,
+    "affected_deployments": 1,
+    "warning_events": 1
+  },
+  "evidence": {
+    "namespace_health": {
+      "cluster_context": "demo-eks-cluster",
+      "namespace": "staging",
+      "status": "anomaly",
+      "message": "Anomaly detected",
+      "summary": {
+        "total_pods": 1,
+        "running_pods": 0,
+        "failed_pods": 0,
+        "pending_pods": 0,
+        "total_deployments": 0,
+        "healthy_deployments": 0,
+        "warning_events": 0,
+        "issues_count": 1
+      },
+      "issues": [
+        {
+          "severity": "critical",
+          "type": "CrashLoopBackOff",
+          "resource_kind": "Pod",
+          "resource_name": "web-app-6d4f8b2c1-abc12",
+          "message": "Pod container 'app' is in CrashLoopBackOff"
+        }
+      ]
+    },
+    "pods": [
+      {
+        "pod_name": "web-app-6d4f8b2c1-abc12",
+        "namespace": "staging",
+        "phase": "Running",
+        "node_name": "ip-10-0-1-42.ec2.internal",
+        "pod_ip": "10.42.0.15",
+        "start_time": "2026-06-30T14:22:10Z",
+        "containers": [
+          {
+            "name": "app",
+            "ready": false,
+            "restart_count": 5,
+            "state": "waiting",
+            "waiting_reason": "CrashLoopBackOff",
+            "terminated_reason": null,
+            "last_terminated_reason": "Error",
+            "last_terminated_exit_code": 1,
+            "last_terminated_finished_at": "2026-06-30T14:25:01Z",
+            "init_container": false,
+            "memory_limit": "512Mi",
+            "memory_request": "256Mi",
+            "cpu_limit": "500m",
+            "cpu_request": "100m"
+          }
+        ],
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "False",
+            "reason": "ContainersNotReady",
+            "message": "containers with unready status: [app]",
+            "last_transition_time": "2026-06-30T14:22:15Z"
+          }
+        ],
+        "issues": [
+          {
+            "severity": "critical",
+            "type": "CrashLoopBackOff",
+            "message": "Container is waiting with reason CrashLoopBackOff"
+          }
+        ]
+      }
+    ],
+    "logs": [
+      {
+        "pod_name": "web-app-6d4f8b2c1-abc12",
+        "namespace": "staging",
+        "container": "app",
+        "tail_lines": 100,
+        "logs": "Error: Cannot find module './config/app-settings'\nRequire stack:\n- /app/server.js\n",
+        "detected_patterns": [
+          {
+            "type": "ModuleNotFound",
+            "matched_text": "Cannot find module",
+            "severity": "warning"
+          },
+          {
+            "type": "Error",
+            "matched_text": "Error",
+            "severity": "warning"
+          }
+        ],
+        "previous_container": false
+      }
+    ],
+    "events": [
+      {
+        "type": "Warning",
+        "reason": "BackOff",
+        "message": "Back-off restarting failed container app in pod web-app-6d4f8b2c1-abc12_staging",
+        "object_kind": "Pod",
+        "object_name": "web-app-6d4f8b2c1-abc12",
+        "count": 12,
+        "last_timestamp": "2026-06-30T14:25:01Z"
+      }
+    ],
+    "deployments": [
+      {
+        "name": "web-app",
+        "namespace": "staging",
+        "desired_replicas": 3,
+        "available_replicas": 2,
+        "ready_replicas": 2,
+        "unavailable_replicas": 1,
+        "healthy": false,
+        "conditions": [
+          {
+            "type": "Available",
+            "status": "False",
+            "reason": "MinimumReplicasUnavailable",
+            "message": "Deployment does not have minimum availability.",
+            "last_transition_time": "2026-06-30T14:22:20Z"
+          }
+        ],
+        "related_pods": ["web-app-6d4f8b2c1-abc12"],
+        "issues": [
+          {
+            "severity": "critical",
+            "type": "DeploymentReplicaMismatch",
+            "message": "Deployment has 2 available replicas out of 3 desired replicas"
+          }
+        ]
+      }
+    ],
+    "nodes": [
+      {
+        "name": "ip-10-0-1-42.ec2.internal",
+        "ready": true,
+        "kubernetes_version": "v1.29.0-eks-abc1234",
+        "os_image": "Amazon Linux 2",
+        "instance_type": "m5.large",
+        "capacity_cpu": "2",
+        "capacity_memory": "8123456Ki",
+        "allocatable_cpu": "1930m",
+        "allocatable_memory": "7555555Ki",
+        "conditions": [
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": "KubeletReady",
+            "message": "kubelet is posting ready status"
+          }
+        ]
+      }
+    ],
+    "oom_investigations": []
+  },
+  "ai_reasoning_context": {
+    "instruction": "Use this structured Kubernetes evidence to reason about the likely root cause. Do not invent missing facts.",
+    "evidence_summary": {
+      "namespace_status": "anomaly",
+      "namespace_message": "Anomaly detected",
+      "issues_count": 1,
+      "affected_pods": ["web-app-6d4f8b2c1-abc12"],
+      "pod_issue_types": ["CrashLoopBackOff"],
+      "log_pattern_types": ["Error", "ModuleNotFound"],
+      "warning_event_reasons": ["BackOff"],
+      "deployment_issue_types": ["DeploymentReplicaMismatch"],
+      "oom_investigation": {
+        "has_oom": false,
+        "affected_pods": [],
+        "investigations": [],
+        "missing_evidence": []
+      },
+      "node_names": ["ip-10-0-1-42.ec2.internal"],
+      "unready_nodes": [],
+      "restart_investigation": {
+        "high_restart_containers": [],
+        "missing_last_termination_details": [],
+        "restart_cause_known": false,
+        "confidence_cap_when_restart_cause_unknown": 55,
+        "missing_evidence": [
+          "liveness/readiness probe configuration",
+          "container resource requests/limits and live usage",
+          "restart timestamps across deployment replicas"
+        ]
+      }
+    }
+  }
+}

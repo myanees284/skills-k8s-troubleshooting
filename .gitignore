@@ -1,0 +1,41 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# Secrets and local config
+.env
+.env.*
+!.env.example
+
+# Local data and history
+.data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Kubeconfig (never commit cluster credentials)
+kubeconfig
+kubeconfig.*
+*.kubeconfig
+config/kubeconfig
+
+# IDE and OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Investigation history (user-local; optional override path)
+.eks-k8s-troubleshooting/
+
+# Organization context (user-local copy — example is committed)
+context/deployment-context.txt
